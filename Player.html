@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!--
+   This document was automatically created using an XSLT stylesheet by Aubrey Barnard.
+   See www.stolaf.edu/people/barnard/xml/xml.html for additional information.
+   -->
+<html xmlns="http://www.w3.org/TR/xhtml1/strict">
+<head>
+<title>The Player Class Specification</title>
+</head>
+<body bgcolor="white">
+<div class="specification">
+  <center>
+<p>
+<big>
+<big>
+<big>
+<big>The Player Class Specification</big>
+</big>
+</big>
+</big>
+</p>
+</center>
+  <center>
+<p>
+<big>
+<big>
+<big>This class modle the player of the Oleopoly</big>
+</big>
+</big>
+</p>
+</center>
+  <center>
+<p>Guanlun Mu.</p>
+</center>
+<br/>
+<hr/>
+<br/>
+<br/>
+
+  <dl class="class-spec">
+<p>
+<dt>
+<big>
+<strong>CLASS <code>public Player</code>
+</strong>
+</big>
+</dt>
+<dd>
+
+    <dl class="inheritance">
+<p>
+<dt>
+<strong>No superclass.</strong>
+</dt>
+<dd/>
+</p>
+</dl>
+
+    <dl class="variables">
+<p>
+<dt>
+<strong>State variables:</strong>
+</dt>
+<dd>
+<dl>
+      <p>
+<dt class="var">
+<code>public  int width</code>
+</dt>
+<dd> the width of the player(token)</dd>
+</p>
+      <p>
+<dt class="var">
+<code>public  int height</code>
+</dt>
+<dd> the height of the token</dd>
+</p>
+      <p>
+<dt class="var">
+<code>public  int x</code>
+</dt>
+<dd> the x coordinate of the player(token)</dd>
+</p>
+      <p>
+<dt class="var">
+<code>public  int y</code>
+</dt>
+<dd> the y coordinate of the player(token)</dd>
+</p>
+      <p>
+<dt class="var">
+<code>public  int balance</code>
+</dt>
+<dd> the balance of the player(token)</dd>
+</p>
+      <p>
+<dt class="var">
+<code>public  int position</code>
+</dt>
+<dd> the position of the player(token) in term of the space that they landed</dd>
+</p>
+    </dl>
+</dd>
+</p>
+</dl>
+
+    <dl class="constructors-list">
+<p>
+<dt>
+<strong>Constructors:</strong>
+</dt>
+<dd>
+<dl>
+      <p>
+<dt class="constructor">
+<code>public Player</code>
+</dt>
+<dd>
+<dl>
+	  Regular Constructor
+	  <p>
+<dt class="arguments">Arguments:</dt>
+<dd>
+<dl>
+	    <p>
+<dt class="arg">
+<code>Board game</code>
+</dt>
+<dd>The coordinated of the corresponding board space will be loaded in to the coordinate of the token </dd>
+</p>
+	  </dl>
+</dd>
+</p>
+	  <p>
+<dt>State change:</dt>
+<dd>All the information for player will be initialized</dd>
+</p>
+	</dl>
+</dd>
+</p>
+
+
+      </dl>
+</dd>
+</p>
+</dl>
+
+  
+      <dl class="methods-list">
+<p>
+<dt>
+<strong>Methods:</strong>
+</dt>
+<dd>
+<dl>
+
+	<p>
+<dt class="method">
+<code> void update</code>
+</dt>
+<dd>
+<dl>
+	  update the position of the token and consequently the corresponding coordinates of the token
+	  <p>
+<dt class="arguments">Arguments:</dt>
+<dd>
+<dl>
+	    <p>
+<dt class="arg">
+<code>Board game</code>
+</dt>
+<dd>This argument can provide the information of the spaces that the token landed on</dd>
+</p>
+	  </dl>
+</dd>
+</p>
+	  <p>
+<dt>State change:</dt>
+<dd>The position of the token was updated interms of the position of the cprresponding space's position on the Board</dd>
+</p>
+	  <p>
+<dt>Return value:</dt>
+<dd>none</dd>
+</p>
+	</dl>
+</dd>
+</p>
+
+      </dl>
+</dd>
+</p>
+</dl>
+
+    </dd>
+<dt>
+<hr/>
+</dt>
+<dd/>
+</p>
+</dl>
+
+  </div>
+</body>
+</html>

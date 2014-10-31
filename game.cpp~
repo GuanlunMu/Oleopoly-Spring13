@@ -1,0 +1,590 @@
+#include<iostream>
+#include<fstream>
+using namespace std;
+#ifdef MACOSX
+#include<GLUT/glut.h>
+#else
+#include<GL/glut.h>
+#endif
+#include<math.h>
+#include<string.h>
+#include<stdlib.h>
+#include"texture.h"
+#include"Board.h"
+#include"Player.h"
+#include"Die.h"
+
+bool mouseIsDragging = false;
+
+//set the interface:
+bool inTheInterface = true;
+int interfaceT;
+int NormalStart, ShinningStart, NormalRule, ShinningRule;
+int NormalOption, ShinningOption, NormalExit, ShinningExit;
+bool startIsPressed = false, overStart = false;
+bool ruleIsPressed = false, overRule = false;
+bool optionIsPressed = false, overOption = false;
+bool exitIsPressed = false, overExit = false;
+double X = 650;
+double Y = 560;
+double W = 170*1.2;
+double H = 48*1.2;
+double startPos[] = {X, Y, W, H};
+double rulePos[] = {X + 15, Y+60, W, H};
+double optionPos[] = {X-10, Y+120, W, H};
+double exitPos[] = {X + 18, Y+ 180, W, H};
+
+//the dice info
+Die dice;
+int dice1 = 6;
+int dice2 = 6;
+
+//set the x and y coordinates of the displayed card:
+int card_x = 180;
+int card_y = 170;
+
+int WIDTH = 1600;  // width of the user window (640 + 80)
+int HEIGHT = 900;  // height of the user window (480 + 60)
+char programName[] = "proto-texture";
+int mypicT, player1T, player2T;  // texture IDs
+//the id of all spaces
+int T01,T03, T06, T08, T09, T11, T13, T14, T16,T18,T19, T21,T23,T24,T26,T27, T29,T31 ,T32 ,T34,T37, T39;
+//pictures of the dices:
+int dice1T, dice2T, dice3T, dice4T, dice5T, dice6T;
+
+// button info
+bool buttonIsPressed = false, overButton = false;
+double buttonPos[] = { 20, 20,   80, 60 };  // upper left, width, height
+
+//button2 info
+bool button2IsPressed= false, overButton2= false;
+double button2Pos[]= {100,100, 40,40};
+
+// textbox info
+bool overTextBox = false;
+string textInBox = "";
+double textBox1[] = { 320, 30,   200, 40 };  // outer box for text
+double textBox2[] = { 325, 35,   190, 30 };  // inner box for text
+const unsigned int MAX_NUM_CHARS_IN_TEXTBOX = 20;
+
+//set the board:
+Board game("boardsetup.txt");
+
+//set the players:
+int NumPlayer = 2;
+Player ** playTurn = new Player*[NumPlayer];
+int turnControl = 0;
+
+
+void drawBox(double x, double y, double width, double height)
+{
+  glBegin(GL_POLYGON);
+  glVertex2f(x, y);  // upper left
+  glVertex2f(x, y + height);  // lower left
+  glVertex2f(x + width, y + height);  // lower right
+  glVertex2f(x + width, y);  // upper right
+  glEnd();
+}
+
+
+void drawBox(double *pos)
+{
+  drawBox(pos[0], pos[1], pos[2], pos[3]);
+}
+
+void drawText(double x, double y, const char *text)
+{
+  glRasterPos2f( x, y );
+  int length = strlen(text);
+  for (int i = 0; i < length; i++)
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, text[i]);
+}
+
+
+void drawSpace(Player & p)
+{
+  int position = p.position;
+  switch (position)
+    {
+    case 1:
+      drawTexture(T01, card_x, card_y, 403, 507);
+      break;
+    case 3:
+      drawTexture(T03, card_x, card_y, 403, 507);
+      break;
+    case 6:
+      drawTexture(T06, card_x, card_y, 403, 507);
+      break;
+    case 8:
+      drawTexture(T08, card_x, card_y, 403, 507);
+      break;
+    case 9:
+      drawTexture(T09, card_x, card_y, 403, 507);
+      break;
+    case 11:
+      drawTexture(T11, card_x, card_y, 403, 507);
+      break;
+    case 13:
+      drawTexture(T13, card_x, card_y, 403, 507);
+      break;
+    case 14:
+      drawTexture(T14, card_x, card_y, 403, 507);
+      break;  
+    case 16:
+      drawTexture(T16, card_x, card_y, 403, 507);
+      break;  
+    case 18:
+      drawTexture(T18, card_x, card_y, 403, 507);
+      break;  
+    case 19:
+      drawTexture(T19, card_x, card_y, 403, 507);
+      break;  
+    case 21:
+      drawTexture(T21, card_x, card_y, 403, 507);
+      break;  
+    case 23:
+      drawTexture(T23, card_x, card_y, 403, 507);
+      break;  
+    case 24:
+      drawTexture(T24, card_x, card_y, 403, 507);
+      break;
+    case 26:
+      drawTexture(T26, card_x, card_y, 403, 507);
+      break;
+    case 27:
+      drawTexture(T27, card_x, card_y, 403, 507);
+      break;
+    case 29:
+      drawTexture(T29, card_x, card_y, 403, 507);
+      break;
+    case 31:
+      drawTexture(T31, card_x, card_y, 403, 507);
+      break;
+    case 32:
+      drawTexture(T32, card_x, card_y, 403, 507);
+      break;
+    case 34:
+      drawTexture(T34, card_x, card_y, 403, 507);
+      break;
+    case 37:
+      drawTexture(T37, card_x, card_y, 403, 507);
+      break;
+    case 39:
+      drawTexture(T39, card_x, card_y, 403, 507);
+      break;
+    }
+
+}
+
+void drawDice1(int diceNo)
+{
+  switch (diceNo)
+    {
+    case 1:
+      drawTexture(dice1T, 52, 352, 60, 60);
+      break;
+    case 2:
+      drawTexture(dice2T, 52, 352, 60, 60);
+      break;
+    case 3:
+      drawTexture(dice3T, 52, 352, 60, 60);
+      break;
+    case 4:
+      drawTexture(dice4T, 52, 352, 60, 60);
+      break;
+    case 5:
+      drawTexture(dice5T, 52, 352, 60, 60);
+      break;
+    case 6:
+      drawTexture(dice6T, 52, 352, 60, 60);
+      break;
+    }
+}
+
+void drawDice2(int diceNo)
+{
+  switch (diceNo)
+    {
+    case 1:
+      drawTexture(dice1T, 52, 425, 60, 60);
+      break;
+    case 2:
+      drawTexture(dice2T, 52, 425, 60, 60);
+      break;
+    case 3:
+      drawTexture(dice3T, 52, 425, 60, 60);
+      break;
+    case 4:
+      drawTexture(dice4T, 52, 425, 60, 60);
+      break;
+    case 5:
+      drawTexture(dice5T, 52, 425, 60, 60);
+      break;
+    case 6:
+      drawTexture(dice6T, 52, 425, 60, 60);
+      break;
+    }
+}
+
+
+void exitAll()
+{
+  int win = glutGetWindow();
+  glutDestroyWindow(win);
+  exit(0);
+}
+
+void drawWindow()
+{
+  // clear the buffer
+  glClear(GL_COLOR_BUFFER_BIT);
+
+
+ 
+  // draw stuff
+ 
+  if (inTheInterface)
+    {
+      drawTexture(interfaceT, 0, 0, WIDTH, HEIGHT);
+      //we draw the button start:
+      if (startIsPressed ||overStart ) drawTexture(ShinningStart, startPos);
+      else drawTexture(NormalStart, startPos);
+      //the rule button:
+      if (ruleIsPressed || overRule) drawTexture (ShinningRule, rulePos);
+      else drawTexture(NormalRule, rulePos);
+      //the option button:
+      if (optionIsPressed || overOption) drawTexture(ShinningOption, optionPos);
+      else drawTexture(NormalOption, optionPos);
+      //the exit button:
+      if (exitIsPressed || overExit) drawTexture(ShinningExit, exitPos);
+      else drawTexture(NormalExit, exitPos);
+    }
+  else
+    {
+      drawTexture(mypicT,   0,0, WIDTH,HEIGHT);
+      drawTexture(player1T, playTurn[0]->x, playTurn[0]->y, playTurn[0]->width, playTurn[0]->height); 
+      drawTexture(player2T, playTurn[1]->x, playTurn[1]->y, playTurn[1]->width, playTurn[1]->height);
+
+      if ( buttonIsPressed ) glColor3f(1., 0., 0.);  // make it red
+      else if ( overButton ) glColor3f(.75,.75,.75);  // light gray
+      else glColor3f(.5, .5, .5); // gray
+      drawBox(buttonPos);
+
+      // draw the button2
+      if (game.board[playTurn[(turnControl+1)%2]->position]-> propertySpace)
+	{
+	  if ( button2IsPressed ) glColor3f(0., 0.5, 0.6);
+	  else if ( overButton2 ) glColor3f(.75,0.,.75); 
+	  else glColor3f(.2, .75, .4);
+	  drawBox(button2Pos);
+	  cout << " the button is drawn!" << endl;
+	}
+
+      //draw the spaces:
+      drawSpace(*playTurn[(turnControl+1)%2]);
+
+
+
+      //draw the dice pic on the screen:
+      //first draw the dice1 on the screen:
+      drawDice1(dice1);
+      drawDice2(dice2);
+      // then draw the second dice:
+    }
+
+  // tell the graphics card that we're done-- go ahead and draw!
+  //   (technically, we are switching between two color buffers...)
+  glutSwapBuffers();
+}
+
+
+
+// process keyboard events
+void keyboard( unsigned char c, int x, int y )
+{
+  int win = glutGetWindow();
+
+  if ( overTextBox ) { // intercept keyboard press, to place in text box
+    if ( 27==c ) exitAll();  // escape terminates the program, even in textbox
+    if ( 13==c ) {
+      cout << "textBox content was: " << textInBox << endl;
+      textInBox = "";
+    } else if ( '\b'==c || 127==c ) { // handle backspace
+      if ( textInBox.length() > 0 ) textInBox.erase(textInBox.end()-1);
+    } else if ( c >= 32 && c <= 126 ) { // check for printable character
+      // check that we don't overflow the box
+      if ( textInBox.length() < MAX_NUM_CHARS_IN_TEXTBOX ) textInBox += c;
+    }
+  } else {
+    switch(c) {
+    case 'q':
+    case 'Q':
+    case 27:
+      // get rid of the window (as part of shutting down)
+      glutDestroyWindow(win);
+      exit(0);
+      break;
+    default:
+      break;
+    }
+  }
+  glutPostRedisplay();
+}
+
+
+bool onButton(int x, int y, double button[])
+{
+  return x >= button[0]  && y >= button[1] &&
+    x <= button[0] + button[2] &&
+    y <= button[1] + button[3];
+}
+
+/*bool onButton2(int x, int y, double button[])
+{
+  return x >= button2Pos[0]  && y >= button2Pos[1] &&
+    x <= button2Pos[0] + button2Pos[2] &&
+    y <= button2Pos[1] + button2Pos[3];
+}
+
+
+bool onTextBox(int x, int y)
+{
+  return x >= textBox1[0] && y >= textBox1[1] &&
+    x <= textBox1[0]+textBox1[2] &&
+    y <= textBox1[1]+textBox1[3];
+}
+
+bool onStart(int x, int y)
+{
+return x >= StartPos[0]  && y >= StartPos[1] &&
+         x <= StartPos[0] + StartPos[2] &&
+         y <= StartPos[1] + StartPos[3];
+}
+
+bool onRule(int x, int y)
+{
+return x >= rulePos[0]  && y >= rulePos[1] &&
+         x <= rulePos[0] + rulePos[2] &&
+         y <= rulePos[1] + rulePos[3];
+}
+
+bool onOption(int x, int y)
+{
+return x >= optionPos[0]  && y >= optionPos[1] &&
+         x <= optionPos[0] + optionPos[2] &&
+         y <= optionPos[1] + optionPos[3];
+}
+
+bool onExit(int x, int y)
+{
+return x >= exitPos[0]  && y >= exitPos[1] &&
+         x <= exitPos[0] + exitPos[2] &&
+         y <= exitPos[1] + exitPos[3];
+}
+*/
+
+// the reshape function handles the case where the user changes the size
+//   of the window.  We need to fix the coordinate
+//   system, so that the drawing area is still the unit square.
+void reshape(int w, int h)
+{
+  glViewport(0, 0, (GLsizei) w, (GLsizei) h);
+  WIDTH = w;  HEIGHT = h;
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glOrtho(0., WIDTH-1, HEIGHT-1, 0., -1.0, 1.0);
+}
+
+// the mouse function is called when a mouse button is pressed down or released
+void mouse(int button, int state, int x, int y)
+{
+  cout << x << " " << y << endl;
+  if ( GLUT_LEFT_BUTTON == button ) 
+    {
+      if ( GLUT_DOWN == state ) 
+	{
+	  //the user just press down the on the mouse-- do something:
+	  if (inTheInterface)
+	    {	  
+	      if (onButton(x, y, startPos)) startIsPressed = true;
+	      else startIsPressed = false;	 
+	      if (onButton(x, y, rulePos)) ruleIsPressed = true;
+	      else ruleIsPressed = false;
+	      if (onButton(x, y, optionPos)) optionIsPressed = true;
+	      else optionIsPressed = false;
+	      if (onButton(x, y, exitPos)) exitIsPressed = true;
+	      else exitIsPressed = false;
+	    }
+	  else
+	    {
+	      if ( onButton(x,y,buttonPos) ) buttonIsPressed = true;
+	      else buttonIsPressed = false;
+	      if (onButton(x,y,button2Pos)) button2IsPressed=true;
+	      else button2IsPressed=false;
+	      mouseIsDragging = true;
+	    }
+	  // the user just pressed down on the mouse-- do something
+	}
+      else
+	{
+	  if (onButton(x, y, startPos) && startIsPressed)
+	    inTheInterface = false;
+	  if (onButton(x,y, rulePos) && ruleIsPressed)
+	    cout <<" rule is pressed!" << endl;
+	  if (onButton(x, y, optionPos) && optionIsPressed)
+	    cout << "option is pressed" << endl;
+	  if(onButton(x, y, exitPos) && exitIsPressed)
+	    exitAll();
+	  if ( onButton(x,y, buttonPos) && buttonIsPressed )
+	    {	      
+	      dice.roll();
+	      dice1 = dice.d1;
+	      dice2 = dice.d2;
+	      cout << "the dices are" << dice1 << " " << dice2 << endl;
+	      int total = dice.getTotal();
+	      playTurn[turnControl%2]->update(game,total);
+	      turnControl++;
+	    }
+	  buttonIsPressed = false;
+
+	  if ( onButton(x,y, button2Pos) && button2IsPressed )
+	    cout << "Button 2 press." << endl;
+	  button2IsPressed = false;
+	  /* if (
+	  // the user just let go the mouse-- do something
+	  mouseIsDragging = false;*/
+	}
+    }
+  else if ( GLUT_RIGHT_BUTTON == button ) 
+    {
+    }
+  glutPostRedisplay();
+}
+
+// the mouse_motion function is called when the mouse is being dragged,
+//   and gives the current location of the mouse
+void mouse_motion(int x,int y)
+{
+  if (buttonIsPressed){
+  }
+  else if(button2IsPressed)
+    {
+    }
+  else
+    {
+      if (onButton(x, y, startPos)) overStart = true;
+      else overStart = false;
+      if (onButton(x, y, rulePos)) overRule = true;
+      else overRule = false;
+      if (onButton(x, y, optionPos)) overOption = true;
+      else overOption = false;
+      if (onButton(x, y, exitPos)) overExit = true;
+      else overExit = false;
+      if ( onButton(x,y,textBox1) ) overTextBox = true;
+      else overTextBox = false;	    
+    }
+
+  // the mouse button is pressed, and the mouse is moving....
+  glutPostRedisplay();
+}
+
+// the init function sets up the graphics card to draw properly
+void init(void)
+{
+  // clear the window to black
+  glClearColor(0.0, 0.0, 0.0, 1.0);
+  glClear(GL_COLOR_BUFFER_BIT);
+
+  // set up the coordinate system:  number of pixels along x and y
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glOrtho(0., WIDTH-1, HEIGHT-1, 0., -1.0, 1.0);
+
+  // allow blending (for transparent textures)
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glEnable(GL_BLEND);
+
+  // welcome message
+  cout << "Welcome to " << programName << "." << endl;
+}
+
+
+// init_gl_window is the function that starts the ball rolling, in
+//  terms of getting everything set up and passing control over to the
+//  glut library for event handling.  It needs to tell the glut library
+//  about all the essential functions:  what function to call if the
+//  window changes shape, what to do to redraw, handle the keyboard,
+//  etc.
+void init_gl_window()
+{
+  char *argv[] = { programName };
+  int argc = sizeof(argv) / sizeof(argv[0]);
+  glutInit(&argc, argv);
+  glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE );
+  glutInitWindowSize(WIDTH,HEIGHT);
+  glutInitWindowPosition(100,100);
+  glutCreateWindow(programName);
+  init();
+
+  mypicT = loadTexture("mypic.pam"); //   to create a .pam from a .jpg
+  //   use the convert command
+  player1T = loadTexture("player1.pam");
+  player2T = loadTexture("player2.pam");
+  T01 = loadTexture("space/01.pam");
+  T03 = loadTexture("space/03.pam");
+  T06 = loadTexture("space/06.pam");
+  T08 = loadTexture("space/08.pam");
+  T09 = loadTexture("space/09.pam");
+  T11 = loadTexture("space/11.pam");
+  T13 = loadTexture("space/13.pam");
+  T14 = loadTexture("space/14.pam");
+  T16 = loadTexture("space/16.pam");
+  T18 = loadTexture("space/18.pam");
+  T19 = loadTexture("space/19.pam");
+  T21 = loadTexture("space/21.pam");
+  T23 = loadTexture("space/23.pam");
+  T24 = loadTexture("space/24.pam");
+  T26 = loadTexture("space/26.pam");
+  T27 = loadTexture("space/27.pam");
+  T29 = loadTexture("space/29.pam");
+  T31 = loadTexture("space/31.pam");
+  T32 = loadTexture("space/32.pam");
+  T34 = loadTexture("space/34.pam");
+  T37 = loadTexture("space/37.pam");
+  T39 = loadTexture("space/39.pam");
+  //load the picture for dice 
+  dice1T = loadTexture("dice/1.pam");
+  dice2T = loadTexture("dice/2.pam");
+  dice3T = loadTexture("dice/3.pam");
+  dice4T = loadTexture("dice/4.pam");
+  dice5T = loadTexture("dice/5.pam");
+  dice6T = loadTexture("dice/6.pam");
+  //load the interface infomation:
+  interfaceT = loadTexture("cover/cover.pam");
+
+  NormalStart = loadTexture("cover/1n.pam");
+  ShinningStart = loadTexture("cover/1s.pam");
+  NormalRule = loadTexture("cover/2n.pam");
+  ShinningRule =  loadTexture("cover/2s.pam");
+  NormalOption =  loadTexture("cover/3n.pam");
+  ShinningOption =   loadTexture("cover/3s.pam");
+  NormalExit =  loadTexture("cover/4n.pam");
+  ShinningExit =  loadTexture("cover/4s.pam");
+
+
+  glutDisplayFunc(drawWindow);
+  glutReshapeFunc(reshape);
+  glutKeyboardFunc(keyboard);
+  glutMouseFunc(mouse);
+  glutMotionFunc(mouse_motion);
+  glutMainLoop();
+}
+
+int main()
+{
+
+  for (int i = 0; i < 2; i++)
+    playTurn[i] = new Player(game);
+  cout<<"Beginning"<<endl;
+  init_gl_window(); 
+}

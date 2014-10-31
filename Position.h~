@@ -1,0 +1,13 @@
+#ifndef _POSITION_
+#define _POSITION_
+
+class Position{
+  int x;
+  int y;
+ public:
+  void setPosition(int a, int b);
+  int getXPos();
+  int getYPos();
+};
+
+#endif

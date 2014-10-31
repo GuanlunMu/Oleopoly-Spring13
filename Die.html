@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!--
+   This document was automatically created using an XSLT stylesheet by Aubrey Barnard.
+   See www.stolaf.edu/people/barnard/xml/xml.html for additional information.
+   -->
+<html xmlns="http://www.w3.org/TR/xhtml1/strict">
+<head>
+<title>The Die Class Specification;</title>
+</head>
+<body bgcolor="white">
+<div class="specification">
+<center>
+<p>
+<big>
+<big>
+<big>
+<big>The Die Class Specification;</big>
+</big>
+</big>
+</big>
+</p>
+</center>
+<center>
+<p>
+<big>
+<big>
+<big>Represents the dice;</big>
+</big>
+</big>
+</p>
+</center>
+<center>
+<p>Written by Matt Kilens, Thursday, May 2, 2013;</p>
+</center>
+<br/>
+<hr/>
+<br/>
+<br/>
+
+<dl class="class-spec">
+<p>
+<dt>
+<big>
+<strong>CLASS <code>public Die</code>
+</strong>
+</big>
+</dt>
+<dd>
+
+<dl class="inheritance">
+<p>
+<dt>
+<strong>No superclass.</strong>
+</dt>
+<dd/>
+</p>
+</dl>
+
+<dl class="variables">
+<p>
+<dt>
+<strong>State variables:</strong>
+</dt>
+<dd>
+<dl>
+<p>
+<dt class="var">
+<code>public  int d1</code>
+</dt>
+<dd>The first die value.</dd>
+</p>
+<p>
+<dt class="var">
+<code>public  int d2</code>
+</dt>
+<dd>The second die value.</dd>
+</p>
+<p>
+<dt class="var">
+<code>public  int numDoubles</code>
+</dt>
+<dd>The number of doubles rolled on this turn</dd>
+</p>  
+</dl>
+</dd>
+</p>
+</dl>
+
+<dl class="constructors-list">
+<p>
+<dt>
+<strong>Constructors:</strong>
+</dt>
+<dd>
+<dl>
+
+<p>
+<dt class="constructor">
+<code>public Die</code>
+</dt>
+<dd>
+<dl>
+Default Constructor
+
+<p>
+<dt class="arguments">No arguments.</dt>
+<dd/>
+</p>
+
+<p>
+<dt>State change:</dt>
+<dd>Initializes the values of the roll to zero</dd>
+</p>
+</dl>
+</dd>
+</p>
+
+</dl>
+</dd>
+</p>
+</dl>
+
+
+<dl class="methods-list">
+<p>
+<dt>
+<strong>Methods:</strong>
+</dt>
+<dd>
+<dl>
+
+<p>
+<dt class="method">
+<code>  roll</code>
+</dt>
+<dd>
+<dl>
+Randomly generates two numbers 1-6.
+
+<p>
+<dt class="arguments">No arguments.</dt>
+<dd/>
+</p>
+<p>
+<dt>State change:</dt>
+<dd>Sets the ramdom numbers as the values of d1 and d2</dd>
+</p>
+<p>
+<dt>Return value:</dt>
+<dd>nothing</dd>
+</p>
+</dl>
+</dd>
+</p>
+
+<p>
+<dt class="method">
+<code> int getTotal</code>
+</dt>
+<dd>
+<dl>
+Calculates and returns the sum of the two dice
+<p>
+<dt class="arguments">No arguments.</dt>
+<dd/>
+</p>
+<p>
+<dt>State change:</dt>
+<dd>none</dd>
+</p>
+<p>
+<dt>Return value:</dt>
+<dd>The sum of the two dice</dd>
+</p>
+</dl>
+</dd>
+</p>
+
+<p>
+<dt class="method">
+<code> bool checkIsDouble</code>
+</dt>
+<dd>
+<dl>
+Checks to see if the two dice have the same number
+<p>
+<dt class="arguments">No arguments.</dt>
+<dd/>
+</p>
+<p>
+<dt>State change:</dt>
+<dd>none</dd>
+</p>
+<p>
+<dt>Return value:</dt>
+<dd>A bool representing the doubles status of the roll</dd>
+</p>
+</dl>
+</dd>
+</p>
+
+</dl>
+</dd>
+</p>
+</dl>
+
+</dd>
+<dt>
+<hr/>
+</dt>
+<dd/>
+</p>
+</dl>
+
+</div>
+</body>
+</html>

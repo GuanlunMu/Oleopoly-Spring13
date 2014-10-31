@@ -1,0 +1,49 @@
+16
+Advance to Go.
+Collect $200.
+1 0 0 0
+Bank error in your favor.
+Collect $200.
+0 200 0 0
+Doctor's fees.
+Pay $50.
+0 -50 0 0
+Get out of Jail free.
+This card may be kept until needed, or traded.
+0 0 0 1
+Go to jail - go directly to jail.
+Do not pass Go, do not collect $200.
+11 0 0 0
+Grand opera night.
+Collect $50 from every player for opening night seats.
+0 0 50 0
+Income Tax refund.
+Collect $20.
+0 20 0 0
+Life Insurance Matures.
+Collect $100.
+0 100 0 0
+Pay Hospital Fees of $100.
+     
+0 -100 0 0
+Pay School tax of $150.
+     
+0 -150 0 0
+Receive $25 Consultancy Fee.
+     
+0 25 0 0
+You have won second prize in a beauty contest.
+Collect $10.
+0 10 0 0
+You inherit $100.
+     
+0 100 0 0
+From sale of stock you get $50.
+     
+0 50 0 0
+Xmas fund matures.
+Collect $100
+0 100 0 0
+You are assessed for street repairs.
+$40 per house, $115 per hotel.
+0 0 0 2

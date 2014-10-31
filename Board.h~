@@ -1,0 +1,13 @@
+#ifndef _BOARD_
+#define _BOARD_
+#include "Space.h"
+
+class Board
+{
+ public:
+  Space** board;
+  Board(const char* filename);
+  Position getTokenPosition(int spaceNum);
+};
+
+#endif

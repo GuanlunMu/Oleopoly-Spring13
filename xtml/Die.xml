@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE spec SYSTEM "http://www.cs.stolaf.edu/lib/SpecML/SpecML.dtd">
+<?xml-stylesheet
+   href="http://www.cs.stolaf.edu/lib/SpecML/SpecMLToHTML.xsl"
+   type="text/xsl"?>
+
+<spec>
+<title>The Die Class Specification;</title>
+<header>Represents the dice;</header>
+<credits>Written by Matt Kilens, Thursday, May 2, 2013;</credits>
+
+<class name="Die" visibility="public">
+
+<nosuperclass/>
+
+<variables>
+<var name="d1" type="int" visibility="public">The first die value.</var>
+<var name="d2" type="int" visibility="public">The second die value.</var>
+<var name="numDoubles" type="int" visibility="public">The number of doubles rolled on this turn</var>  
+</variables>
+
+<constructors-list>
+
+<constructor visibility="public">
+<desc>Default Constructor</desc>
+
+<noarguments />
+
+<statechange>Initializes the values of the roll to zero</statechange>
+</constructor>
+
+</constructors-list>
+
+
+<methods-list>
+
+<method name="roll">
+<desc>Randomly generates two numbers 1-6.</desc>
+
+<noarguments/>
+<statechange>Sets the ramdom numbers as the values of d1 and d2</statechange>
+<return>nothing</return>
+</method>
+
+<method name="getTotal" returntype="int">
+<desc>Calculates and returns the sum of the two dice</desc>
+<noarguments/>
+<statechange>none</statechange>
+<return>The sum of the two dice</return>
+</method>
+
+<method name="checkIsDouble" returntype="bool">
+<desc>Checks to see if the two dice have the same number</desc>
+<noarguments/>
+<statechange>none</statechange>
+<return>A bool representing the doubles status of the roll</return>
+</method>
+
+</methods-list>
+
+</class>
+
+</spec>
